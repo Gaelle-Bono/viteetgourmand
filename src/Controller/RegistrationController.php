@@ -31,8 +31,8 @@ class RegistrationController extends AbstractController
             // encode the plain password
             $user->setPassword($userPasswordHasher->hashPassword($user, $plainPassword));
 
-            //add 'ROLE_UTILISATEUR' to a new subscriber
-            $role = $roleRepository->findOneBy(['libelle' => 'ROLE_UTILISATEUR']);
+            //add 'USER_ROLE' to a new subscriber
+           $role = $roleRepository->findOneBy(['name' => 'USER_ROLE']);
             
             if ($role) {
                 $user->setRole($role);

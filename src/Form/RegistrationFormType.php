@@ -20,15 +20,7 @@ class RegistrationFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('nom', TextType::class, [
-                'label' => 'Nom',
-                'required' => true,
-                'attr' => [
-                    'maxlength' => 50
-                ]
-            ])
-
-            ->add('prenom', TextType::class, [
+            ->add('firstName', TextType::class, [
                 'label' => 'Prénom',
                 'required' => true,
                 'attr' => [
@@ -36,7 +28,15 @@ class RegistrationFormType extends AbstractType
                 ]
             ])
 
-            ->add('telephone', TextType::class, [
+            ->add('lastName', TextType::class, [
+                'label' => 'Nom',
+                'required' => true,
+                'attr' => [
+                    'maxlength' => 50
+                ]
+            ])
+
+            ->add('phoneNumber', TextType::class, [
                 'label' => 'Télephone',
                 'required' => true,
                 'attr' => [
@@ -44,16 +44,23 @@ class RegistrationFormType extends AbstractType
                 ]
             ])
 
-            ->add('adressePostale', TextType::class, [
+            ->add('address', TextType::class, [
                 'label' => 'Adresse',
                 'required' => true,
                 'attr' => [
-                    'maxlength' => 50
-                ],
-                'help' => 'Entrez le numéro de rue, la rue et le code postal'
+                    'maxlength' => 100
+                ]
             ])
 
-            ->add('ville', TextType::class, [
+            ->add('zipCode', TextType::class, [
+                'label' => 'Code postal',
+                'required' => true,
+                'attr' => [
+                    'maxlength' => 10
+                ]
+            ])
+
+            ->add('city', TextType::class, [
                 'label' => 'Ville',
                 'required' => true,
                 'attr' => [
@@ -61,7 +68,7 @@ class RegistrationFormType extends AbstractType
                 ]
             ])
 
-            ->add('pays', TextType::class, [
+            ->add('country', TextType::class, [
                 'label' => 'Pays',
                 'required' => true,
                 'attr' => [
@@ -108,14 +115,14 @@ class RegistrationFormType extends AbstractType
             // ->add('role', ChoiceType::class, [
             //     'label' => 'Rôle',
             //     'choices' => [
-            //         'Utilisateur' => 'ROLE_USER',
-            //         'Administrateur' => 'ROLE_ADMIN'
+            //         'Utilisateur' => 'USER_ROLE',
+            //         'Administrateur' => 'ADMIN_ROLE'
             //     ],
             //     'expanded' => false, // true = boutons radio
             //     'multiple' => false
             // ])
 
-            // Bouton de soumission
+            // Submit button
             ->add('save', SubmitType::class, [
                 'label' => 'Enregistrer'
             ])

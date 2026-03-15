@@ -3,13 +3,14 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
-#[UniqueEntity(fields: ['email'], message: 'Il existe déjà un compte avec ce mail')]
+#[UniqueEntity(fields: ['email'], message: 'Il existe déjà un compte avec cet email')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
@@ -17,7 +18,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 50, unique: true)]
+    #[ORM\Column(length: 180, unique: true)]
     private ?string $email = null;
 
     /**
@@ -27,22 +28,25 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $password = null;
 
     #[ORM\Column(length: 50)]
-    private ?string $prenom = null;
+    private ?string $firstName = null;
 
     #[ORM\Column(length: 50)]
-    private ?string $nom = null;
+    private ?string $lastName = null;
 
     #[ORM\Column(length: 50)]
-    private ?string $telephone = null;
+    private ?string $phoneNumber = null;
+
+    #[ORM\Column(type: Types::TEXT)]
+    private ?string $address = null;
+
+    #[ORM\Column(length: 10)]
+    private ?string $zipCode = null;
 
     #[ORM\Column(length: 50)]
-    private ?string $ville = null;
+    private ?string $city = null;
 
     #[ORM\Column(length: 50)]
-    private ?string $pays = null;
-
-    #[ORM\Column(length: 50)]
-    private ?string $adressePostale = null;
+    private ?string $country = null;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
@@ -75,6 +79,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return (string) $this->email;
     }
 
+
     /**
      * @see PasswordAuthenticatedUserInterface
      */
@@ -96,8 +101,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function __serialize(): array
     {
         $data = (array) $this;
-        $data["\0".self::class."\0password"] = hash('crc32c', $this->password);
-
+        $data["\0" . self::class . "\0password"] = hash('crc32c', $this->password);
+        
         return $data;
     }
 
@@ -107,84 +112,97 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         // @deprecated, to be removed when upgrading to Symfony 8
     }
 
-    public function getPrenom(): ?string
+    public function getFirstName(): ?string
     {
-        return $this->prenom;
+        return $this->firstName;
     }
 
-    public function setPrenom(string $prenom): static
+    public function setFirstName(string $firstName): static
     {
-        $this->prenom = $prenom;
+        $this->firstName = $firstName;
 
         return $this;
     }
 
-    public function getNom(): ?string
+    public function getLastName(): ?string
     {
-        return $this->nom;
+        return $this->lastName;
     }
 
-    public function setNom(string $nom): static
+    public function setLastName(string $lastName): static
     {
-        $this->nom = $nom;
+        $this->lastName = $lastName;
 
         return $this;
     }
 
-    public function getTelephone(): ?string
+    public function getPhoneNumber(): ?string
     {
-        return $this->telephone;
+        return $this->phoneNumber;
     }
 
-    public function setTelephone(string $telephone): static
+    public function setPhoneNumber(string $phoneNumber): static
     {
-        $this->telephone = $telephone;
+        $this->phoneNumber = $phoneNumber;
 
         return $this;
     }
 
-    public function getVille(): ?string
+    public function getAddress(): ?string
     {
-        return $this->ville;
+        return $this->address;
     }
 
-    public function setVille(string $ville): static
+    public function setAddress(string $address): static
     {
-        $this->ville = $ville;
+        $this->address = $address;
 
         return $this;
     }
 
-    public function getPays(): ?string
+    public function getZipCode(): ?string
     {
-        return $this->pays;
+        return $this->zipCode;
     }
 
-    public function setPays(string $pays): static
+    public function setZipCode(string $zipCode): static
     {
-        $this->pays = $pays;
+        $this->zipCode = $zipCode;
 
         return $this;
     }
 
-    public function getAdressePostale(): ?string
+    public function getCity(): ?string
     {
-        return $this->adressePostale;
+        return $this->city;
     }
 
-    public function setAdressePostale(string $adressePostale): static
+    public function setCity(string $city): static
     {
-        $this->adressePostale = $adressePostale;
+        $this->city = $city;
 
         return $this;
     }
+
+    public function getCountry(): ?string
+    {
+        return $this->country;
+    }
+
+    public function setCountry(string $country): static
+    {
+        $this->country = $country;
+
+        return $this;
+    }
+
 
     /**
      * @see UserInterface
      */
     public function getRoles(): array
     {
-        return $this->role ? [$this->role->getLibelle()] : [];
+        return $this->role ? [$this->role->getname()] : [];
     }
 
     public function getRole(): ?Role
@@ -195,6 +213,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setRole(?Role $role): static
     {
         $this->role = $role;
+
         return $this;
     }
 }
